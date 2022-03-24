@@ -1,0 +1,22 @@
+{
+  "name": "post-method",
+  "version": "1.0.0",
+  "description": "call other page function by postMessage",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Young-qqqq/post-method.git"
+  },
+  "keywords": [
+    "post-method"
+  ],
+  "author": "Youngqqqq <youngqqqq@163.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Young-qqqq/post-method/issues"
+  },
+  "homepage": "https://github.com/Young-qqqq/post-method#readme"
+}
