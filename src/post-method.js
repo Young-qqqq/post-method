@@ -1,20 +1,21 @@
 /**
- * Author: Young
- * Date: 2022.3.24
- * Description: PostMessage Util for call the method in Iframe Page
- * Version: 1.0.0
+ * @param el DOM element
+ * @param option the option object{src: iframe URL, methods: callback functions}
+ * @create 2022.3.24
+ * @description PostMessage Util for call the method in Iframe Page
+ * @author Young
+ * @version: 1.0.0
 */
-const version = 'beta - 1.0.0'
 class PostMethod {
   constructor(el, option) {
     if (option.src !== undefined) {
       this.el = createIframeDom(el, option.src)
     } else {
-      this.src = el.src
       this.el = el
     }
+    this.src = option.src
     this.methods = option.methods || {}
-    window.addEventListener('message', this._callback)
+    PostMethod.addPostMessageEvent(this.methods)
   }
   // 回调方法，供message事件调用
   _callback = (e) => {
@@ -45,7 +46,7 @@ class PostMethod {
 
   // 调用父页面方法
   callPraent (funcName, ...params) {
-    window.parent.postMessage({ funcName, params }, '*');
+    PostMethod.callParent(funcName, ...params)
   }
 
   // 销毁message事件
@@ -53,6 +54,17 @@ class PostMethod {
     window.removeEventListener('message', this._callback)
   }
 
+  static callParent (funcName, ...params) {
+    window.parent.postMessage({ funcName, params }, '*');
+  }
+
+  static addPostMessageEvent (methods = window) {
+    window.addEventListener('message', (e) => {
+      var data = e.data;
+      const { funcName, params } = data
+      methods[funcName](...params);
+    })
+  }
   static version = version
 }
 
@@ -62,6 +74,7 @@ function createIframeDom (el, src) {
   iframeDom.src = src
   iframeDom.style.height = '100%'
   iframeDom.style.width = '100%'
+  iframeDom.style.border = 'none'
   el.appendChild(iframeDom)
   return iframeDom
 }
