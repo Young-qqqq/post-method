@@ -15,7 +15,7 @@ class PostMethod {
     }
     this.src = option.src
     this.methods = option.methods || {}
-    PostMethod.addPostMessageEvent(this.methods)
+    PostMethod.addPostMessageEvent(option.methodsEnv || this.methods)
   }
   // 回调方法，供message事件调用
   _callback = (e) => {
@@ -45,7 +45,7 @@ class PostMethod {
   }
 
   // 调用父页面方法
-  callPraent (funcName, ...params) {
+  callParent (funcName, ...params) {
     PostMethod.callParent(funcName, ...params)
   }
 
@@ -58,11 +58,11 @@ class PostMethod {
     window.parent.postMessage({ funcName, params }, '*');
   }
 
-  static addPostMessageEvent (methods = window) {
+  static addPostMessageEvent (methodsEnv = window) {
     window.addEventListener('message', (e) => {
       var data = e.data;
       const { funcName, params } = data
-      methods[funcName](...params);
+      methodsEnv[funcName](...params);
     })
   }
   static version = version
